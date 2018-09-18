@@ -10,8 +10,9 @@ body {
   color: #9daccb;
   margin: auto;
   width: 10%;
-  height: 20%;
-  padding: 200px;
+  /* height: 20%; */
+
+  padding-top: 150px;
   text-align: left;
   font-size: 32px;
 }

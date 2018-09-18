@@ -3,7 +3,10 @@ import jinja2
 
 app = Flask(__name__)
 
-all_users = open("users.txt", "r").read().split("\n")
+all_users = {"CSTeam1" : "password1",
+             "YaaYeet" : "yee"}
+
+login_attempts = []
 
 def test_login_inputs(usr, pwd):
     if usr in all_users:
@@ -19,9 +22,10 @@ def index():
 def login():
     log_access = 0
     if request.form['username'] and request.form['password']:
+        login_attempts.append((request.form['username'], request.form['password']))
         if test_login_inputs(request.form['username'], request.form['password']):
             log_access = 1
-
+    print(login_attempts)
     return render_template("login.html", login_access=log_access, name=request.form['username'])
 
-app.run(host="0.0.0.0", port=80, debug=True)
+app.run(host="0.0.0.0", port=81, debug=True)
