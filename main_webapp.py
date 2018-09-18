@@ -1,17 +1,19 @@
 from flask import Flask, session, render_template, request
 import jinja2
+import datetime
 
 app = Flask(__name__)
 
-all_users = {"CSTeam1" : "password1",
-             "YaaYeet" : "yee"}
+all_userids = open("users.txt", "r").read().split("\n")
 
-login_attempts = []
+def create_timestamp():
+    dt = datetime.datetime(1,1,1)
+    stamp = str(dt.now()).split(".")[0]
+    return stamp
 
-def test_login_inputs(usr, pwd):
-    if usr in all_users:
-        if pwd == all_users[usr]:
-            return True
+def test_login_inputs(usrid):
+    if usrid in all_userids:
+        return True
     return False
 
 @app.route("/")
@@ -21,11 +23,13 @@ def index():
 @app.route("/login", methods=['POST'])
 def login():
     log_access = 0
-    if request.form['username'] and request.form['password']:
-        login_attempts.append((request.form['username'], request.form['password']))
-        if test_login_inputs(request.form['username'], request.form['password']):
+    if request.form['user_id']:
+        login_attempts = open("login_attempts.txt", "a")
+        if test_login_inputs(request.form['user_id']):
             log_access = 1
-    print(login_attempts)
-    return render_template("login.html", login_access=log_access, name=request.form['username'])
+            login_attempts.write("{} ; {} ; {}\n".format(create_timestamp(), request.form['user_id'], "[OK]"))
+        else:
+            login_attempts.write("{} ; {} ; {}\n".format(create_timestamp(), request.form['user_id'], "[Failed]"))
+    return render_template("login.html", login_access=log_access, name="null")
 
 app.run(host="0.0.0.0", port=81, debug=True)
