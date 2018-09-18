@@ -3,7 +3,7 @@ import jinja2
 
 app = Flask(__name__)
 
-all_users = {"CSTeam1" : "password1"}
+all_users = open("users.txt", "r").read().split("\n")
 
 def test_login_inputs(usr, pwd):
     if usr in all_users:
