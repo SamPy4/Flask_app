@@ -27,9 +27,9 @@ def login():
         login_attempts = open("login_attempts.txt", "a")
         if test_login_inputs(request.form['user_id']):
             log_access = 1
-            login_attempts.write("{} ; {} ; {}\n".format(create_timestamp(), request.form['user_id'], "[OK]"))
+            login_attempts.write("{},{},{},{}\n".format(create_timestamp(), request.form['user_id'], "True", request.remote_addr))
         else:
-            login_attempts.write("{} ; {} ; {}\n".format(create_timestamp(), request.form['user_id'], "[Failed]"))
+            login_attempts.write("{},{},{},{}\n".format(create_timestamp(), request.form['user_id'], "False", request.remote_addr))
     return render_template("login.html", login_access=log_access, name="null")
 
 app.run(host="0.0.0.0", port=81, debug=True)
